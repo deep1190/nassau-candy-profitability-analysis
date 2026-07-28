@@ -391,7 +391,7 @@ def style_fig(fig, height=450, legend_top=False):
         plot_bgcolor=SURFACE,
         font=dict(color=TEXT, family="Inter, sans-serif"),
         margin=dict(l=10, r=10, t=30, b=10),
-        xaxis=dict(gridcolor=GRID, zerolinecolor=GRID, color=TEXT),
+        xaxis=dict(gridcolor=GRID, zerolinecolor=GRID, color=TEXT, automargin=True),
         yaxis=dict(gridcolor=GRID, zerolinecolor=GRID, color=TEXT),
     )
     if legend_top:
@@ -552,14 +552,29 @@ with tab1:
         st.plotly_chart(fig, use_container_width=True)
 
     with c2:
-        fig2 = px.pie(prod, values="Gross_Profit", names="Product Name", hole=0.45,
+        prod_pie = prod.sort_values("Gross_Profit", ascending=False)
+        fig2 = px.pie(prod_pie, values="Gross_Profit", names="Product Name", hole=0.45,
                        color_discrete_sequence=PALETTE)
-        fig2.update_layout(showlegend=False)
-        fig2.update_traces(textinfo="label+percent", textfont_size=9, textfont_color=TEXT,
+        # Labels live in the legend (not on/around the slices) so small wedges
+        # never get their text clipped by the chart edge — every product is
+        # still fully readable, just off to the side instead of overlapping.
+        fig2.update_traces(textinfo="percent", textposition="inside", textfont_size=10,
+                            textfont_color=TEXT, insidetextorientation="radial",
                             marker=dict(line=dict(color=APP_BG, width=2)))
+        fig2.update_layout(
+            showlegend=True,
+            legend=dict(
+                orientation="v", font=dict(color=TEXT, size=10),
+                x=1.02, y=0.5, xanchor="left", yanchor="middle",
+                itemsizing="constant", bgcolor="rgba(0,0,0,0)",
+            ),
+            uniformtext_minsize=8, uniformtext_mode="hide",
+        )
         style_fig(fig2, height=460)
+        fig2.update_layout(margin=dict(l=10, r=170, t=30, b=10))
         st.plotly_chart(fig2, use_container_width=True)
-        st.caption("Profit contribution by product")
+        st.caption("Profit contribution by product — hover any slice for exact values; "
+                    "full product list in the legend.")
 
     st.subheader("Portfolio Quadrant: Sales vs. Margin")
     st.caption("Bubble size = total gross profit. Products above the median margin line "
@@ -741,9 +756,13 @@ with tab4:
         fig.update_layout(
             yaxis2=dict(overlaying="y", side="right", range=[0, 105], title="Cumulative %",
                         color=TEXT, gridcolor=GRID),
-            xaxis=dict(tickangle=-45),
+            # tickangle=-90 + automargin keeps the long product names from
+            # overlapping each other along the crowded bottom axis, and lets
+            # Plotly reserve enough space so the last labels aren't cropped.
+            xaxis=dict(tickangle=-90, tickfont=dict(size=9), automargin=True),
         )
-        style_fig(fig, height=450, legend_top=True)
+        style_fig(fig, height=500, legend_top=True)
+        fig.update_layout(margin=dict(b=140))
         st.plotly_chart(fig, use_container_width=True)
         n80 = (pr["Cumulative %"] <= 80).sum() + 1
         st.info(f"**{n80} of {len(pr)} products ({n80/len(pr)*100:.0f}%)** generate 80% of total revenue.")
@@ -759,9 +778,10 @@ with tab4:
         fig.update_layout(
             yaxis2=dict(overlaying="y", side="right", range=[0, 105], title="Cumulative %",
                         color=TEXT, gridcolor=GRID),
-            xaxis=dict(tickangle=-45),
+            xaxis=dict(tickangle=-90, tickfont=dict(size=9), automargin=True),
         )
-        style_fig(fig, height=450, legend_top=True)
+        style_fig(fig, height=500, legend_top=True)
+        fig.update_layout(margin=dict(b=140))
         st.plotly_chart(fig, use_container_width=True)
         n80p = (pp["Cumulative %"] <= 80).sum() + 1
         st.info(f"**{n80p} of {len(pp)} products ({n80p/len(pp)*100:.0f}%)** generate 80% of total gross profit.")
@@ -772,8 +792,12 @@ with tab4:
     n_states_80 = (state_pareto["Cumulative %"] <= 80).sum() + 1
     fig = px.bar(state_rev.head(15), x="State/Province", y="Sales", color="Sales",
                  color_continuous_scale=["#3B2A22", "#FF5A79"])
-    fig.update_layout(coloraxis_showscale=False, xaxis=dict(tickangle=-45))
-    style_fig(fig, height=420)
+    fig.update_layout(
+        coloraxis_showscale=False,
+        xaxis=dict(tickangle=-45, tickfont=dict(size=10), automargin=True),
+    )
+    style_fig(fig, height=440)
+    fig.update_layout(margin=dict(b=70))
     st.plotly_chart(fig, use_container_width=True)
     st.info(f"**{n_states_80} of {len(state_pareto)} states ({n_states_80/len(state_pareto)*100:.0f}%)** "
             f"account for 80% of total revenue — indicating meaningful geographic dependency risk.")
