@@ -2,7 +2,7 @@
 
 An interactive analytics system to evaluate SKU-level margins, division performance, and operational profitability.
 
-[![Open Live Dashboard](https://img.shields.io/badge/Streamlit-Open_Live_Dashboard-FF4B4B?logo=streamlit&style=for-the-badge)](LIVE_DEMO_LINK_PLACEHOLDER)
+[![Open Live Dashboard](https://img.shields.io/badge/Streamlit-Open_Live_Dashboard-FF4B4B?logo=streamlit&style=for-the-badge)](https://z8y7dduyr9u5ysnyb86oec.streamlit.app/)
 
 ---
 
@@ -18,7 +18,7 @@ This project was initiated to address critical blind spots in Nassau Candy's pro
 
 ## What This Project Delivers
 1. **[Research Paper](file:///docs/Nassau_Candy_Research_Paper.docx)**: A comprehensive data analysis report detailing the exploratory data analysis (EDA), findings, and strategic recommendations.
-2. **[Interactive Streamlit Dashboard](LIVE_DEMO_LINK_PLACEHOLDER)**: A live, user-friendly business intelligence tool to filter and drill down into order-level data in real-time.
+2. **[Interactive Streamlit Dashboard](https://z8y7dduyr9u5ysnyb86oec.streamlit.app/)**: A live, user-friendly business intelligence tool to filter and drill down into order-level data in real-time.
 3. **[Executive Summary](file:///docs/Nassau_Candy_Executive_Summary.docx)**: A concise, high-level summary of findings and strategic actions tailored for leadership.
 
 ## Key Findings
@@ -66,7 +66,7 @@ The interactive Streamlit application provides 5 diagnostic modules:
 ## How to Run Locally
 1. Clone this repository:
    ```bash
-   git clone <REPOSITORY_URL>
+   git clone https://github.com/deep1190/nassau-candy-profitability-analysis.git
    cd nassau-candy-profitability-analysis
    ```
 2. Navigate to the application folder:
