@@ -21,7 +21,6 @@ st.set_page_config(
 
 PALETTE = ["#52362B", "#FF5A79", "#4EA8DE", "#F4A261", "#06D6A0", "#9B5DE5"]
 DIVISION_COLORS = {"Chocolate": "#52362B", "Sugar": "#FF5A79", "Other": "#4EA8DE"}
-
 CUSTOM_CSS = """
 <style>
 .stApp { background-color: #FDFBF7; }
