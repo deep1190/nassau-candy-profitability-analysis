@@ -23,22 +23,303 @@ PALETTE = ["#52362B", "#FF5A79", "#4EA8DE", "#F4A261", "#06D6A0", "#9B5DE5"]
 DIVISION_COLORS = {"Chocolate": "#52362B", "Sugar": "#FF5A79", "Other": "#4EA8DE"}
 CUSTOM_CSS = """
 <style>
-.stApp { background-color: #FDFBF7; }
-/* Force heading colors */
-h1, h2, h3,
-[data-testid="stHeading"] h1,
-[data-testid="stHeading"] h2,
-[data-testid="stHeading"] h3 {
-    color: #52362B !important;
-    font-family: 'Outfit', 'Georgia', serif !important;
+
+/* ==========================================================
+   IMPORT FONT
+========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+html, body, [class*="css"]{
+    font-family:'Inter',sans-serif;
 }
-[data-testid="stMetricValue"] { color: #52362B; font-weight: 700; }
-[data-testid="stMetricLabel"] { color: #7D6B60; }
-.stTabs [data-baseweb="tab"] { font-size: 15px; font-weight: 600; color: #7D6B60; }
-.stTabs [aria-selected="true"] { color: #FF5A79 !important; border-bottom-color: #FF5A79 !important; }
-div[data-testid="stSidebar"] { background-color: #F8F3EB; }
-.risk-badge-high { background:#FFF0F2; color:#FF3366; padding:3px 10px; border-radius:12px; font-size:12px; font-weight:600;}
-.risk-badge-ok { background:#E6F7ED; color:#00A86B; padding:3px 10px; border-radius:12px; font-size:12px; font-weight:600;}
+
+/* ==========================================================
+   PAGE
+========================================================== */
+
+.stApp{
+    background:#F5F7FA;
+    color:#0F172A;
+}
+
+/* ==========================================================
+   SIDEBAR
+========================================================== */
+
+section[data-testid="stSidebar"]{
+    background:#1E293B;
+    border-right:1px solid #334155;
+}
+
+section[data-testid="stSidebar"] *{
+    color:#F8FAFC;
+}
+
+section[data-testid="stSidebar"] .stCaption{
+    color:#CBD5E1 !important;
+}
+
+section[data-testid="stSidebar"] label{
+    color:white !important;
+    font-weight:600;
+}
+
+/* ==========================================================
+   TITLES
+========================================================== */
+
+h1{
+    color:#0F172A !important;
+    font-weight:700 !important;
+}
+
+h2{
+    color:#0F172A !important;
+    font-weight:700 !important;
+}
+
+h3{
+    color:#1E293B !important;
+    font-weight:600 !important;
+}
+
+[data-testid="stHeading"]{
+    color:#0F172A !important;
+}
+
+/* ==========================================================
+   METRIC CARDS
+========================================================== */
+
+div[data-testid="metric-container"]{
+
+    background:white;
+
+    border:1px solid #E5E7EB;
+
+    border-radius:16px;
+
+    padding:18px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
+
+}
+
+[data-testid="stMetricLabel"]{
+
+    color:#64748B;
+
+    font-size:14px;
+
+}
+
+[data-testid="stMetricValue"]{
+
+    color:#2563EB;
+
+    font-size:30px;
+
+    font-weight:700;
+
+}
+
+/* ==========================================================
+   TABS
+========================================================== */
+
+.stTabs [data-baseweb="tab"]{
+
+    font-size:15px;
+
+    font-weight:600;
+
+    color:#64748B;
+
+    padding:12px 18px;
+
+}
+
+.stTabs [aria-selected="true"]{
+
+    color:#2563EB !important;
+
+    border-bottom:3px solid #2563EB !important;
+
+}
+
+/* ==========================================================
+   BUTTONS
+========================================================== */
+
+.stButton button{
+
+    background:#2563EB;
+
+    color:white;
+
+    border:none;
+
+    border-radius:10px;
+
+}
+
+.stButton button:hover{
+
+    background:#1D4ED8;
+
+}
+
+/* ==========================================================
+   INPUTS
+========================================================== */
+
+.stTextInput input,
+.stDateInput input,
+.stNumberInput input{
+
+    border-radius:10px !important;
+
+    border:1px solid #CBD5E1 !important;
+
+}
+
+.stMultiSelect div[data-baseweb="select"]{
+
+    border-radius:10px;
+
+}
+
+/* ==========================================================
+   TABLES
+========================================================== */
+
+thead tr{
+
+    background:#F1F5F9 !important;
+
+}
+
+thead th{
+
+    color:#0F172A !important;
+
+    font-weight:700 !important;
+
+}
+
+tbody tr:nth-child(even){
+
+    background:#FAFAFA;
+
+}
+
+/* ==========================================================
+   DATAFRAME
+========================================================== */
+
+[data-testid="stDataFrame"]{
+
+    border:1px solid #E5E7EB;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+}
+
+/* ==========================================================
+   EXPANDERS
+========================================================== */
+
+.streamlit-expanderHeader{
+
+    font-weight:600;
+
+}
+
+/* ==========================================================
+   ALERTS
+========================================================== */
+
+div[data-baseweb="notification"]{
+
+    border-radius:12px;
+
+}
+
+/* ==========================================================
+   RISK BADGES
+========================================================== */
+
+.risk-badge-high{
+
+    background:#FEE2E2;
+
+    color:#B91C1C;
+
+    padding:4px 10px;
+
+    border-radius:999px;
+
+    font-weight:600;
+
+    font-size:12px;
+
+}
+
+.risk-badge-ok{
+
+    background:#DCFCE7;
+
+    color:#166534;
+
+    padding:4px 10px;
+
+    border-radius:999px;
+
+    font-weight:600;
+
+    font-size:12px;
+
+}
+
+/* ==========================================================
+   HORIZONTAL RULE
+========================================================== */
+
+hr{
+
+    border:none;
+
+    border-top:1px solid #E5E7EB;
+
+}
+
+/* ==========================================================
+   SCROLLBAR
+========================================================== */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#CBD5E1;
+
+    border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#94A3B8;
+
+}
+
 </style>
 """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
