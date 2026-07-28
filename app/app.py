@@ -19,9 +19,18 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-PALETTE = ["#52362B", "#FF5A79", "#4EA8DE", "#F4A261", "#06D6A0", "#9B5DE5"]
-DIVISION_COLORS = {"Chocolate": "#52362B", "Sugar": "#FF5A79", "Other": "#4EA8DE"}
-CUSTOM_CSS = """
+PALETTE = ["#F4A261", "#FF5A79", "#4EA8DE", "#C77D4F", "#06D6A0", "#9B5DE5"]
+DIVISION_COLORS = {"Chocolate": "#C77D4F", "Sugar": "#FF5A79", "Other": "#4EA8DE"}
+
+# Dark app background + surface colors reused across every Plotly figure so
+# charts never fall back to a white canvas inside the dark shell.
+APP_BG = "#0F172A"
+SURFACE = "#1E293B"
+GRID = "#334155"
+TEXT = "#E2E8F0"
+MUTED_TEXT = "#94A3B8"
+
+CUSTOM_CSS = f"""
 <style>
 
 /* ==========================================================
@@ -30,145 +39,193 @@ CUSTOM_CSS = """
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-html, body, [class*="css"]{
+html, body, [class*="css"]{{
     font-family:'Inter',sans-serif;
-}
+}}
+
+/* Reset any default link styling so it can never leak through onto
+   tabs/nav elements (this is what caused the unstyled red/gray tab text) */
+a, a:visited, a:hover, a:active {{
+    color: inherit !important;
+    text-decoration: none !important;
+}}
 
 /* ==========================================================
    PAGE
 ========================================================== */
 
-.stApp{
-    background:#F5F7FA;
-    color:#0F172A;
-}
+.stApp{{
+    background:{APP_BG} !important;
+    color:{TEXT} !important;
+}}
+
+[data-testid="stAppViewContainer"], [data-testid="stHeader"]{{
+    background:{APP_BG} !important;
+}}
+
+[data-testid="stHeader"]{{
+    background:transparent !important;
+}}
 
 /* ==========================================================
    SIDEBAR
 ========================================================== */
+section[data-testid="stSidebar"]{{
+    background:#020617 !important;
+    border-right:1px solid {GRID};
+}}
 
-section[data-testid="stSidebar"]{
-    background:#1E293B;
-    border-right:1px solid #334155;
-}
+section[data-testid="stSidebar"] *{{
+    color:{TEXT} !important;
+}}
 
-section[data-testid="stSidebar"] *{
-    color:#F8FAFC;
-}
-
-section[data-testid="stSidebar"] .stCaption{
-    color:#CBD5E1 !important;
-}
-
-section[data-testid="stSidebar"] label{
-    color:white !important;
+section[data-testid="stSidebar"] label{{
+    color:{MUTED_TEXT} !important;
     font-weight:600;
-}
+    font-size:13px;
+}}
+
+section[data-testid="stSidebar"] [data-testid="stCaptionContainer"]{{
+    color:#64748B !important;
+}}
+
+section[data-testid="stSidebar"] hr{{
+    border-top:1px solid {GRID} !important;
+}}
+
+/* Sidebar inputs need explicit dark surfaces or they render as white boxes */
+section[data-testid="stSidebar"] input,
+section[data-testid="stSidebar"] textarea,
+section[data-testid="stSidebar"] [data-baseweb="select"] > div,
+section[data-testid="stSidebar"] [data-baseweb="input"]{{
+    background:{SURFACE} !important;
+    border:1px solid {GRID} !important;
+    color:{TEXT} !important;
+}}
+
+section[data-testid="stSidebar"] [data-baseweb="tag"]{{
+    background:#2563EB !important;
+    color:white !important;
+}}
 
 /* ==========================================================
    TITLES
 ========================================================== */
 
-h1{
-    color:#0F172A !important;
+h1, h2{{
+    color:{TEXT} !important;
     font-weight:700 !important;
-}
+}}
 
-h2{
-    color:#0F172A !important;
-    font-weight:700 !important;
-}
-
-h3{
-    color:#1E293B !important;
+h3{{
+    color:{TEXT} !important;
     font-weight:600 !important;
-}
+}}
 
-[data-testid="stHeading"]{
-    color:#0F172A !important;
-}
+[data-testid="stHeading"]{{
+    color:{TEXT} !important;
+}}
+
+p, span, label, .stMarkdown, [data-testid="stCaptionContainer"]{{
+    color:{TEXT};
+}}
 
 /* ==========================================================
    METRIC CARDS
 ========================================================== */
-
-div[data-testid="metric-container"]{
-
-    background:white;
-
-    border:1px solid #E5E7EB;
-
+div[data-testid="stMetric"]{{
+    background:{SURFACE};
+    border:1px solid {GRID};
     border-radius:16px;
+    padding:14px 16px;
+    box-shadow:none;
+}}
 
-    padding:18px;
+[data-testid="stMetricLabel"]{{
+    color:{MUTED_TEXT} !important;
+}}
 
-    box-shadow:0 4px 12px rgba(0,0,0,.05);
+[data-testid="stMetricValue"]{{
+    color:#60A5FA !important;
+}}
 
-}
-
-[data-testid="stMetricLabel"]{
-
-    color:#64748B;
-
-    font-size:14px;
-
-}
-
-[data-testid="stMetricValue"]{
-
-    color:#2563EB;
-
-    font-size:30px;
-
-    font-weight:700;
-
-}
+[data-testid="stMetricDelta"]{{
+    color:#06D6A0 !important;
+}}
 
 /* ==========================================================
-   TABS
+   TABS  (hardened — highest specificity + !important so the
+   dark pill styling always wins, including on narrow viewports)
 ========================================================== */
 
-.stTabs [data-baseweb="tab"]{
+.stTabs{{
+    margin-top: 10px;
+}}
 
-    font-size:15px;
+div.stTabs [data-baseweb="tab-list"]{{
+    background:{SURFACE} !important;
+    padding:8px !important;
+    border-radius:14px !important;
+    gap:6px !important;
+    flex-wrap:nowrap !important;
+    overflow-x:auto !important;
+    border-bottom:none !important;
+}}
 
-    font-weight:600;
+div.stTabs [data-baseweb="tab-list"] button[data-baseweb="tab"]{{
+    background:transparent !important;
+    color:{MUTED_TEXT} !important;
+    border-radius:10px !important;
+    padding:10px 18px !important;
+    font-size:14px !important;
+    font-weight:600 !important;
+    white-space:nowrap !important;
+    transition:all .2s ease !important;
+    border:none !important;
+}}
 
-    color:#64748B;
+div.stTabs [data-baseweb="tab-list"] button[data-baseweb="tab"] p{{
+    color:inherit !important;
+    font-weight:600 !important;
+}}
 
-    padding:12px 18px;
+div.stTabs [data-baseweb="tab-list"] button[data-baseweb="tab"]:hover{{
+    background:{GRID} !important;
+    color:#FFFFFF !important;
+}}
 
-}
+div.stTabs [data-baseweb="tab-list"] button[aria-selected="true"]{{
+    background:#2563EB !important;
+    color:white !important;
+    box-shadow:0 4px 12px rgba(37,99,235,.35) !important;
+}}
 
-.stTabs [aria-selected="true"]{
+div.stTabs [data-baseweb="tab-list"] button[aria-selected="true"] p{{
+    color:white !important;
+}}
 
-    color:#2563EB !important;
+div.stTabs [data-baseweb="tab-highlight"]{{
+    background:transparent !important;
+}}
 
-    border-bottom:3px solid #2563EB !important;
-
-}
+div.stTabs [data-baseweb="tab-border"]{{
+    background:transparent !important;
+}}
 
 /* ==========================================================
    BUTTONS
 ========================================================== */
 
-.stButton button{
-
+.stButton button{{
     background:#2563EB;
-
     color:white;
-
     border:none;
-
     border-radius:10px;
+}}
 
-}
-
-.stButton button:hover{
-
+.stButton button:hover{{
     background:#1D4ED8;
-
-}
+}}
 
 /* ==========================================================
    INPUTS
@@ -176,153 +233,147 @@ div[data-testid="metric-container"]{
 
 .stTextInput input,
 .stDateInput input,
-.stNumberInput input{
-
+.stNumberInput input{{
     border-radius:10px !important;
+    border:1px solid {GRID} !important;
+    background:{SURFACE} !important;
+    color:{TEXT} !important;
+}}
 
-    border:1px solid #CBD5E1 !important;
-
-}
-
-.stMultiSelect div[data-baseweb="select"]{
-
+.stMultiSelect div[data-baseweb="select"]{{
     border-radius:10px;
-
-}
-
-/* ==========================================================
-   TABLES
-========================================================== */
-
-thead tr{
-
-    background:#F1F5F9 !important;
-
-}
-
-thead th{
-
-    color:#0F172A !important;
-
-    font-weight:700 !important;
-
-}
-
-tbody tr:nth-child(even){
-
-    background:#FAFAFA;
-
-}
+}}
 
 /* ==========================================================
-   DATAFRAME
+   DATAFRAME  (glide-data-grid canvas widget — needs the theme
+   set via config.toml; these rules cover the HTML fallback
+   tables rendered with .to_html() elsewhere in the app)
 ========================================================== */
-
-[data-testid="stDataFrame"]{
-
-    border:1px solid #E5E7EB;
-
+[data-testid="stDataFrame"]{{
+    background:{SURFACE};
+    border:1px solid {GRID};
     border-radius:12px;
-
     overflow:hidden;
+}}
 
-}
+table{{
+    color:{TEXT} !important;
+    border-collapse:collapse;
+    width:100%;
+}}
+
+thead tr{{
+    background:{GRID} !important;
+}}
+
+thead th{{
+    color:white !important;
+    padding:8px 10px !important;
+}}
+
+tbody tr{{
+    background:{SURFACE} !important;
+    color:{TEXT} !important;
+}}
+
+tbody tr:nth-child(even){{
+    background:#243244 !important;
+}}
+
+tbody td{{
+    padding:8px 10px !important;
+    border-top:1px solid {GRID} !important;
+}}
 
 /* ==========================================================
    EXPANDERS
 ========================================================== */
 
-.streamlit-expanderHeader{
-
+.streamlit-expanderHeader{{
     font-weight:600;
-
-}
+    color:{TEXT} !important;
+    background:{SURFACE} !important;
+}}
 
 /* ==========================================================
    ALERTS
 ========================================================== */
 
-div[data-baseweb="notification"]{
-
+div[data-baseweb="notification"]{{
     border-radius:12px;
-
-}
+}}
 
 /* ==========================================================
    RISK BADGES
 ========================================================== */
 
-.risk-badge-high{
-
-    background:#FEE2E2;
-
-    color:#B91C1C;
-
+.risk-badge-high{{
+    background:#450A0A;
+    color:#FCA5A5;
     padding:4px 10px;
-
     border-radius:999px;
-
     font-weight:600;
-
     font-size:12px;
+}}
 
-}
-
-.risk-badge-ok{
-
-    background:#DCFCE7;
-
-    color:#166534;
-
+.risk-badge-ok{{
+    background:#052E16;
+    color:#86EFAC;
     padding:4px 10px;
-
     border-radius:999px;
-
     font-weight:600;
-
     font-size:12px;
-
-}
+}}
 
 /* ==========================================================
    HORIZONTAL RULE
 ========================================================== */
 
-hr{
-
+hr{{
     border:none;
-
-    border-top:1px solid #E5E7EB;
-
-}
+    border-top:1px solid {GRID};
+}}
 
 /* ==========================================================
    SCROLLBAR
 ========================================================== */
 
-::-webkit-scrollbar{
-
+::-webkit-scrollbar{{
     width:10px;
+}}
 
-}
-
-::-webkit-scrollbar-thumb{
-
-    background:#CBD5E1;
-
+::-webkit-scrollbar-thumb{{
+    background:{GRID};
     border-radius:20px;
+}}
 
-}
-
-::-webkit-scrollbar-thumb:hover{
-
-    background:#94A3B8;
-
-}
+::-webkit-scrollbar-thumb:hover{{
+    background:{MUTED_TEXT};
+}}
 
 </style>
 """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
+
+
+def style_fig(fig, height=450, legend_top=False):
+    """Apply the shared dark theme to every Plotly figure so charts never
+    render a white canvas inside the dark app shell."""
+    layout_kwargs = dict(
+        height=height,
+        paper_bgcolor=APP_BG,
+        plot_bgcolor=SURFACE,
+        font=dict(color=TEXT, family="Inter, sans-serif"),
+        margin=dict(l=10, r=10, t=30, b=10),
+        xaxis=dict(gridcolor=GRID, zerolinecolor=GRID, color=TEXT),
+        yaxis=dict(gridcolor=GRID, zerolinecolor=GRID, color=TEXT),
+    )
+    if legend_top:
+        layout_kwargs["legend"] = dict(orientation="h", y=1.12, font=dict(color=TEXT))
+    fig.update_layout(**layout_kwargs)
+    # scatter_geo / choropleth figures don't use xaxis/yaxis — harmless if unused
+    return fig
+
 
 FACTORY_COORDS = {
     "Lot's O' Nuts": (32.881893, -111.768036),
@@ -465,20 +516,22 @@ with tab1:
         p_sorted = prod.sort_values("Gross Margin %")
         fig = px.bar(
             p_sorted, x="Gross Margin %", y="Product Name", orientation="h",
-            color="Gross Margin %", color_continuous_scale=["#FF5A79", "#F4A261", "#52362B"],
+            color="Gross Margin %", color_continuous_scale=["#FF5A79", "#F4A261", "#C77D4F"],
             text=p_sorted["Gross Margin %"].round(1).astype(str) + "%",
         )
-        fig.add_vline(x=margin_med, line_dash="dash", line_color="grey",
-                       annotation_text=f"Median {margin_med:.1f}%")
-        fig.update_layout(height=460, showlegend=False, coloraxis_showscale=False,
-                           plot_bgcolor="white", margin=dict(l=10, r=10, t=10, b=10))
+        fig.add_vline(x=margin_med, line_dash="dash", line_color=MUTED_TEXT,
+                       annotation_text=f"Median {margin_med:.1f}%", annotation_font_color=TEXT)
+        fig.update_layout(showlegend=False, coloraxis_showscale=False)
+        style_fig(fig, height=460)
         st.plotly_chart(fig, use_container_width=True)
 
     with c2:
         fig2 = px.pie(prod, values="Gross_Profit", names="Product Name", hole=0.45,
                        color_discrete_sequence=PALETTE)
-        fig2.update_layout(height=460, showlegend=False, margin=dict(l=10, r=10, t=10, b=10))
-        fig2.update_traces(textinfo="label+percent", textfont_size=9)
+        fig2.update_layout(showlegend=False)
+        fig2.update_traces(textinfo="label+percent", textfont_size=9, textfont_color=TEXT,
+                            marker=dict(line=dict(color=APP_BG, width=2)))
+        style_fig(fig2, height=460)
         st.plotly_chart(fig2, use_container_width=True)
         st.caption("Profit contribution by product")
 
@@ -492,12 +545,13 @@ with tab1:
             "⭐ Star (High-Sales / High-Margin)": "#06D6A0",
             "⚠️ Volume Trap (High-Sales / Low-Margin)": "#FF5A79",
             "💎 Niche (Low-Sales / High-Margin)": "#4EA8DE",
-            "🚩 Laggard (Low-Sales / Low-Margin)": "#A59489",
+            "🚩 Laggard (Low-Sales / Low-Margin)": "#94A3B8",
         },
     )
-    fig3.add_vline(x=sales_med, line_dash="dash", line_color="grey")
-    fig3.add_hline(y=margin_med, line_dash="dash", line_color="grey")
-    fig3.update_layout(height=520, plot_bgcolor="white")
+    fig3.add_vline(x=sales_med, line_dash="dash", line_color=MUTED_TEXT)
+    fig3.add_hline(y=margin_med, line_dash="dash", line_color=MUTED_TEXT)
+    style_fig(fig3, height=520, legend_top=False)
+    fig3.update_layout(legend=dict(font=dict(color=TEXT)))
     st.plotly_chart(fig3, use_container_width=True)
 
     cA, cB = st.columns(2)
@@ -554,9 +608,9 @@ with tab2:
         st.markdown("**Revenue Share vs. Profit Share**")
         fig = go.Figure()
         fig.add_bar(name="Revenue Share %", x=div["Division"], y=div["Revenue Share %"], marker_color="#4EA8DE")
-        fig.add_bar(name="Profit Share %", x=div["Division"], y=div["Profit Share %"], marker_color="#52362B")
-        fig.update_layout(barmode="group", height=420, plot_bgcolor="white",
-                           legend=dict(orientation="h", y=1.1))
+        fig.add_bar(name="Profit Share %", x=div["Division"], y=div["Profit Share %"], marker_color="#C77D4F")
+        fig.update_layout(barmode="group")
+        style_fig(fig, height=420, legend_top=True)
         st.plotly_chart(fig, use_container_width=True)
         st.caption("A division whose profit-share bar is shorter than its revenue-share bar "
                    "is contributing disproportionately less profit than its sales volume implies.")
@@ -565,7 +619,8 @@ with tab2:
         st.markdown("**Order-Level Margin Distribution by Division**")
         fig = px.box(df, x="Division", y="Gross Margin %", color="Division",
                      color_discrete_map=DIVISION_COLORS, points=False)
-        fig.update_layout(height=420, showlegend=False, plot_bgcolor="white")
+        fig.update_layout(showlegend=False)
+        style_fig(fig, height=420)
         st.plotly_chart(fig, use_container_width=True)
         st.caption("Wider boxes / longer whiskers indicate less predictable, more volatile margins.")
 
@@ -577,7 +632,7 @@ with tab2:
     ).reset_index(name="Margin %").sort_values("Order Month")
     fig = px.line(trend_g, x="Order Month", y="Margin %", color="Division", markers=True,
                   color_discrete_map=DIVISION_COLORS)
-    fig.update_layout(height=400, plot_bgcolor="white", legend=dict(orientation="h", y=1.1))
+    style_fig(fig, height=400, legend_top=True)
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("**Division Summary Table**")
@@ -596,12 +651,12 @@ with tab3:
     c1, c2 = st.columns(2)
     with c1:
         st.markdown("**Order-Level Cost vs. Sales**")
-        fig = px.scatter(df, x="Cost", y="Sales", color="Division", opacity=0.4,
+        fig = px.scatter(df, x="Cost", y="Sales", color="Division", opacity=0.5,
                           color_discrete_map=DIVISION_COLORS)
         max_v = max(df["Sales"].max(), df["Cost"].max()) * 1.05
         fig.add_trace(go.Scatter(x=[0, max_v], y=[0, max_v], mode="lines",
-                                  line=dict(color="grey", dash="dash"), name="Breakeven line"))
-        fig.update_layout(height=480, plot_bgcolor="white", legend=dict(orientation="h", y=1.1))
+                                  line=dict(color=MUTED_TEXT, dash="dash"), name="Breakeven line"))
+        style_fig(fig, height=480, legend_top=True)
         st.plotly_chart(fig, use_container_width=True)
 
     with c2:
@@ -611,9 +666,9 @@ with tab3:
             hover_name="Product Name", size_max=45,
             color_discrete_map={"High Cost Risk": "#FF5A79", "Normal": "#06D6A0"},
         )
-        fig.add_hline(y=cost_flag_thresh, line_dash="dash", line_color="grey",
-                       annotation_text="High cost-risk threshold")
-        fig.update_layout(height=480, plot_bgcolor="white", legend=dict(orientation="h", y=1.1))
+        fig.add_hline(y=cost_flag_thresh, line_dash="dash", line_color=MUTED_TEXT,
+                       annotation_text="High cost-risk threshold", annotation_font_color=TEXT)
+        style_fig(fig, height=480, legend_top=True)
         st.plotly_chart(fig, use_container_width=True)
 
     st.subheader("Margin Risk Flags")
@@ -656,12 +711,13 @@ with tab4:
         fig.add_bar(x=pr["Product Name"], y=pr["Sales"], marker_color="#4EA8DE", name="Sales")
         fig.add_trace(go.Scatter(x=pr["Product Name"], y=pr["Cumulative %"], yaxis="y2",
                                   mode="lines+markers", line=dict(color="#FF5A79"), name="Cumulative %"))
-        fig.add_hline(y=80, line_dash="dash", line_color="grey", yref="y2")
+        fig.add_hline(y=80, line_dash="dash", line_color=MUTED_TEXT, yref="y2")
         fig.update_layout(
-            height=450, plot_bgcolor="white",
-            yaxis2=dict(overlaying="y", side="right", range=[0, 105], title="Cumulative %"),
-            legend=dict(orientation="h", y=1.15), xaxis=dict(tickangle=-45),
+            yaxis2=dict(overlaying="y", side="right", range=[0, 105], title="Cumulative %",
+                        color=TEXT, gridcolor=GRID),
+            xaxis=dict(tickangle=-45),
         )
+        style_fig(fig, height=450, legend_top=True)
         st.plotly_chart(fig, use_container_width=True)
         n80 = (pr["Cumulative %"] <= 80).sum() + 1
         st.info(f"**{n80} of {len(pr)} products ({n80/len(pr)*100:.0f}%)** generate 80% of total revenue.")
@@ -670,15 +726,16 @@ with tab4:
         st.markdown("**Profit Concentration by Product**")
         pp = pareto_table(prod, "Gross_Profit", "Product Name")
         fig = go.Figure()
-        fig.add_bar(x=pp["Product Name"], y=pp["Gross_Profit"], marker_color="#52362B", name="Gross Profit")
+        fig.add_bar(x=pp["Product Name"], y=pp["Gross_Profit"], marker_color="#C77D4F", name="Gross Profit")
         fig.add_trace(go.Scatter(x=pp["Product Name"], y=pp["Cumulative %"], yaxis="y2",
                                   mode="lines+markers", line=dict(color="#FF5A79"), name="Cumulative %"))
-        fig.add_hline(y=80, line_dash="dash", line_color="grey", yref="y2")
+        fig.add_hline(y=80, line_dash="dash", line_color=MUTED_TEXT, yref="y2")
         fig.update_layout(
-            height=450, plot_bgcolor="white",
-            yaxis2=dict(overlaying="y", side="right", range=[0, 105], title="Cumulative %"),
-            legend=dict(orientation="h", y=1.15), xaxis=dict(tickangle=-45),
+            yaxis2=dict(overlaying="y", side="right", range=[0, 105], title="Cumulative %",
+                        color=TEXT, gridcolor=GRID),
+            xaxis=dict(tickangle=-45),
         )
+        style_fig(fig, height=450, legend_top=True)
         st.plotly_chart(fig, use_container_width=True)
         n80p = (pp["Cumulative %"] <= 80).sum() + 1
         st.info(f"**{n80p} of {len(pp)} products ({n80p/len(pp)*100:.0f}%)** generate 80% of total gross profit.")
@@ -688,8 +745,9 @@ with tab4:
     state_pareto = pareto_table(state_rev, "Sales", "State/Province")
     n_states_80 = (state_pareto["Cumulative %"] <= 80).sum() + 1
     fig = px.bar(state_rev.head(15), x="State/Province", y="Sales", color="Sales",
-                 color_continuous_scale=["#FDFBF7", "#FF5A79"])
-    fig.update_layout(height=420, plot_bgcolor="white", coloraxis_showscale=False, xaxis=dict(tickangle=-45))
+                 color_continuous_scale=["#3B2A22", "#FF5A79"])
+    fig.update_layout(coloraxis_showscale=False, xaxis=dict(tickangle=-45))
+    style_fig(fig, height=420)
     st.plotly_chart(fig, use_container_width=True)
     st.info(f"**{n_states_80} of {len(state_pareto)} states ({n_states_80/len(state_pareto)*100:.0f}%)** "
             f"account for 80% of total revenue — indicating meaningful geographic dependency risk.")
@@ -710,10 +768,17 @@ with tab5:
         st.markdown("**Sourcing Factory Locations** (bubble size = total gross profit)")
         fig = px.scatter_geo(
             fac, lat="Lat", lon="Lon", size="Gross_Profit", color="Gross Margin %",
-            hover_name="Factory", scope="usa", color_continuous_scale=["#FF5A79", "#F4A261", "#52362B"],
+            hover_name="Factory", scope="usa", color_continuous_scale=["#FF5A79", "#F4A261", "#C77D4F"],
             hover_data={"Sales": ":$,.0f", "Gross_Profit": ":$,.0f", "Lat": False, "Lon": False},
         )
-        fig.update_layout(height=460, margin=dict(l=0, r=0, t=0, b=0))
+        fig.update_geos(
+            bgcolor=APP_BG, landcolor=SURFACE, subunitcolor=GRID,
+            lakecolor=APP_BG, showland=True, showsubunits=True,
+        )
+        fig.update_layout(
+            height=460, margin=dict(l=0, r=0, t=0, b=0),
+            paper_bgcolor=APP_BG, font=dict(color=TEXT),
+        )
         st.plotly_chart(fig, use_container_width=True)
     with c2:
         st.markdown("**Factory Profitability**")
