@@ -92,4 +92,6 @@ Data cleaning steps involved importing raw transaction logs, removing duplicates
 * **Streamlit** (Web application framework)
 
 ## Author
-* **[Your Name]** - [Your Email / Contact Information]
+* **[Deepika Gupta]**
+* [deepikagupta1190@gmail.com]
+* [9560616390]
