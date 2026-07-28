@@ -24,7 +24,14 @@ DIVISION_COLORS = {"Chocolate": "#52362B", "Sugar": "#FF5A79", "Other": "#4EA8DE
 CUSTOM_CSS = """
 <style>
 .stApp { background-color: #FDFBF7; }
-h1, h2, h3 { color: #52362B; font-family: 'Outfit', 'Georgia', serif; }
+/* Force heading colors */
+h1, h2, h3,
+[data-testid="stHeading"] h1,
+[data-testid="stHeading"] h2,
+[data-testid="stHeading"] h3 {
+    color: #52362B !important;
+    font-family: 'Outfit', 'Georgia', serif !important;
+}
 [data-testid="stMetricValue"] { color: #52362B; font-weight: 700; }
 [data-testid="stMetricLabel"] { color: #7D6B60; }
 .stTabs [data-baseweb="tab"] { font-size: 15px; font-weight: 600; color: #7D6B60; }
