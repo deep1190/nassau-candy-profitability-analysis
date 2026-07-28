@@ -143,14 +143,40 @@ div[data-testid="stMetric"]{{
 
 [data-testid="stMetricLabel"]{{
     color:{MUTED_TEXT} !important;
+    white-space:normal !important;
+    overflow:visible !important;
+    text-overflow:unset !important;
+}}
+
+[data-testid="stMetricLabel"] p{{
+    white-space:normal !important;
+    overflow:visible !important;
+    text-overflow:unset !important;
 }}
 
 [data-testid="stMetricValue"]{{
     color:#60A5FA !important;
+    white-space:normal !important;
+    overflow:visible !important;
+    text-overflow:unset !important;
+    font-size:1.55rem !important;
+    line-height:1.25 !important;
+    word-break:break-word !important;
 }}
 
 [data-testid="stMetricDelta"]{{
     color:#06D6A0 !important;
+    white-space:normal !important;
+    overflow:visible !important;
+    text-overflow:unset !important;
+}}
+
+[data-testid="stMetricDelta"] div{{
+    white-space:normal !important;
+}}
+
+div[data-testid="stMetric"]{{
+    min-height:96px;
 }}
 
 /* ==========================================================
