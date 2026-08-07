@@ -17,7 +17,7 @@ This project was initiated to address critical blind spots in Nassau Candy's pro
 * Which specific SKUs represent severe margin risks and require urgent pricing reviews, cost renegotiation, or rationalization.
 
 ## What This Project Delivers
-1. **[Research Paper](https://www.researchgate.net/publication/411876432_Product_Line_Profitability_Margin_Performance_Analysis_Nassau_Candy_Distributor_Research_Paper)**: A comprehensive data analysis report detailing the exploratory data analysis (EDA), findings, and strategic recommendations. A local copy is also available in [docs/Nassau_Candy_Research_Paper.docx](docs/Nassau_Candy_Research_Paper.docx).
+1. **[Research Paper](https://www.researchgate.net/publication/411876432_Product_Line_Profitability_Margin_Performance_Analysis_Nassau_Candy_Distributor_Research_Paper)**: A comprehensive data analysis report detailing the exploratory data analysis (EDA), findings, and strategic recommendations.
 2. **[Interactive Streamlit Dashboard](https://z8y7dduyr9u5ysnyb86oec.streamlit.app/)**: A live, user-friendly business intelligence tool to filter and drill down into order-level data in real-time.
 3. **[Executive Summary](file:///docs/Nassau_Candy_Executive_Summary.docx)**: A concise, high-level summary of findings and strategic actions tailored for leadership.
 
